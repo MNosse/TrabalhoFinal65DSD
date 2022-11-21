@@ -1,9 +1,15 @@
 package app;
 
-import view.server.TelaInicialServer;
+import view.server.ServerGUI;
+
+import java.io.IOException;
 
 public class MainServerGUI {
     public static void main(String[] args) {
-        new TelaInicialServer().iniciar();
+        try {
+            new ServerGUI();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }

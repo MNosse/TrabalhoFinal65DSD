@@ -1,7 +1,7 @@
 package view.client.screen;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import view.resourses.ColorsIntances;
+//import com.formdev.flatlaf.FlatIntelliJLaf;
+//import view.resourses.ColorsIntances;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +11,8 @@ public class TelaInicialClient {
     private String host;
     
     public void iniciar() {
-        FlatIntelliJLaf.registerCustomDefaultsSource("styles");
-        FlatIntelliJLaf.setup();
+//        FlatIntelliJLaf.registerCustomDefaultsSource("styles");
+//        FlatIntelliJLaf.setup();
         UIManager.put("OptionPane.cancelButtonText", "Cancelar");
         do {
             host = JOptionPane.showInputDialog(null, "Insira o host que deseja conectar:", "Servidor", JOptionPane.QUESTION_MESSAGE);
