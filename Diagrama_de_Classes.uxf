@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.0.0">
-  <zoom_level>8</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>32</x>
-      <y>608</y>
-      <w>288</w>
-      <h>120</h>
+      <x>30</x>
+      <y>456</y>
+      <w>216</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>bg=red
 Server
 --
-_- HOSTS_ADICIONADOS: Map&lt;String, PrintStream&gt;_
-_- HOSTS_OFFLINES: List&lt;String&gt;_
-- CONEXAO: Socket
-- nomeClient: String
+- HOSTS_ONLINE: Set&lt;String&gt;
+- HOSTS_OFFLINE: Set&lt;String&gt;
+- HOSTSPORTS: Map&lt;String, String&gt;
+- SERVER_SOCKET: ServerSocket;
+- PORT: int
 --
-+ Server(observer: ServerObserver, conexao: Socket)
-+ run(): void
++ Server(observer: ServerObserver, port: int)
+- clientsListener(): void
+- sendToOne(message: String, name: String): void
 - sendToAll(message: String): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>352</x>
-      <y>608</y>
-      <w>352</w>
-      <h>160</h>
+      <x>270</x>
+      <y>456</y>
+      <w>264</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>bg=red
 Client
 --
-- CONEXAO: Socket
-- NOME: String
-- SAIDA: PrintStream
+- NAME: String
+- HOST: String
+- PORT: int
+- SEVER_SOCKET: ServerSocket
 --
-+ Client(conexao: Socket, nome: String, observer: ClientObserver)
-+ run(): void
++ Client(nome: String, host: String, port: int, observer: ClientObserver)
+- serverListener(): void
 - connect(nome: String): void
 - listHosts(): void
 + sendMessage(message: String): void
@@ -49,27 +52,30 @@ Client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>88</x>
-      <y>448</y>
-      <w>176</w>
-      <h>80</h>
+      <x>72</x>
+      <y>336</y>
+      <w>132</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>bg=yellow
 &lt;&lt;interface&gt;&gt;
 ServerObserver
 --
++ notifyWaiting(): void
 + notifyOnline(name: String): void
 + notifyOffline(name: String): void
-+ notifyQuit(name: String): void</panel_attributes>
++ notifyQuit(name: String): void
++ notifyClose(): void
++ notifyError(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>448</y>
-      <w>272</w>
-      <h>128</h>
+      <x>300</x>
+      <y>336</y>
+      <w>204</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>bg=yellow
 &lt;&lt;interface&gt;&gt;
@@ -78,8 +84,8 @@ ClientObserver
 + notifyOnline(name: String): void
 + notifyOffline(name: String): void
 + notifyQuit(name: String): void
-+ notifyTimeOut(): void
 + notifyError(): void
++ notifyClose(): void
 + showMessage(who: String, message: String): void
 + listHosts(hosts: String[]): void</panel_attributes>
     <additional_attributes/>
@@ -87,65 +93,65 @@ ClientObserver
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>296</y>
-      <w>320</w>
-      <h>112</h>
+      <x>6</x>
+      <y>216</y>
+      <w>240</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>bg=green
 ServerGUIController
 --
-- SERVER_SOCKET: ServerSocket
 --
 + ServerGUIController(observer: ServeGUIObserver, port: int)
-- createAcceptThread: void
-+ notifyOnline(name: String): void
-+ notifyOffline(name: String): void
-+ notifyQuit(name: String): void</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>80</x>
-      <y>80</y>
-      <w>176</w>
-      <h>104</h>
-    </coordinates>
-    <panel_attributes>bg=yellow
-&lt;&lt;interface&gt;&gt;
-ServerGUIObserver
---
++ notifyWaiting(): void
 + notifyOnline(name: String): void
 + notifyOffline(name: String): void
 + notifyQuit(name: String): void
-+ notifyWaiting(): void
++ notifyClose(): void
 + notifyError(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>352</x>
-      <y>216</y>
-      <w>448</w>
-      <h>192</h>
+      <x>66</x>
+      <y>48</y>
+      <w>132</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>bg=yellow
+&lt;&lt;interface&gt;&gt;
+ServerGUIObserver
+--
++ notifyWaiting(): void
++ notifyOnline(name: String): void
++ notifyOffline(name: String): void
++ notifyQuit(name: String): void
++ notifyClose(): void
++ notifyError(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>174</y>
+      <w>336</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>bg=green
 ClientGUIController
 --
-- SERVER: Socket
 --
 + ClientGUIController(observer: ClientGUIObserver, host: String, port: int, name: String)
-- createClient(name: String): void
 + sendMessage(message: String): void
 + disconnect(): void
 + quit(): void
 + notifyOnline(name: String): void
 + notifyOffline(name: String): void
 + notifyQuit(name: String): void
-+ notifyTimeOut(): void
 + notifyError(): void
++ notifyClose(): void
 + showMessage(who: String, message: String): void
 + listHosts(hosts: String[]): void</panel_attributes>
     <additional_attributes/>
@@ -153,10 +159,10 @@ ClientGUIController
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>440</x>
-      <y>56</y>
-      <w>272</w>
-      <h>128</h>
+      <x>336</x>
+      <y>42</y>
+      <w>204</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>bg=yellow
 &lt;&lt;interface&gt;&gt;
@@ -165,63 +171,30 @@ ClientGUIObserver
 + notifyOnline(name: String): void
 + notifyOffline(name: String): void
 + notifyQuit(name: String): void
-+ notifyTimeOut(): void
 + notifyError(): void
++ notifyClose(): void
 + showMessage(who: String, message: String): void
 + listHosts(hosts: String[]): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>312</x>
-      <y>496</y>
-      <w>48</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>Thread</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>336</x>
-      <y>512</y>
-      <w>48</w>
-      <h>112</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;40.0;120.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>296</x>
-      <y>512</y>
-      <w>48</w>
-      <h>112</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>40.0;10.0;10.0;120.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>168</x>
-      <y>520</y>
-      <w>24</w>
-      <h>104</h>
+      <x>132</x>
+      <y>420</y>
+      <w>18</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
-      <y>568</y>
-      <w>24</w>
-      <h>56</h>
+      <x>396</x>
+      <y>426</y>
+      <w>18</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -229,10 +202,10 @@ ClientGUIObserver
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
-      <y>400</y>
-      <w>24</w>
-      <h>64</h>
+      <x>396</x>
+      <y>300</y>
+      <w>18</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
@@ -240,10 +213,10 @@ ClientGUIObserver
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>168</x>
-      <y>400</y>
-      <w>24</w>
-      <h>64</h>
+      <x>132</x>
+      <y>300</y>
+      <w>18</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
@@ -251,10 +224,10 @@ ClientGUIObserver
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>64</x>
-      <y>400</y>
-      <w>24</w>
-      <h>224</h>
+      <x>54</x>
+      <y>300</y>
+      <w>18</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;260.0;10.0;10.0</additional_attributes>
@@ -262,10 +235,10 @@ ClientGUIObserver
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>672</x>
-      <y>400</y>
-      <w>24</w>
-      <h>224</h>
+      <x>510</x>
+      <y>300</y>
+      <w>18</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;260.0;10.0;10.0</additional_attributes>
@@ -273,32 +246,32 @@ ClientGUIObserver
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>568</x>
-      <y>176</y>
-      <w>24</w>
-      <h>56</h>
+      <x>432</x>
+      <y>132</y>
+      <w>18</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>160</x>
-      <y>176</y>
-      <w>24</w>
-      <h>136</h>
+      <x>126</x>
+      <y>132</y>
+      <w>18</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>408</x>
+      <x>312</x>
       <y>0</y>
-      <w>56</w>
-      <h>24</h>
+      <w>42</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=blue
 ClientGUI</panel_attributes>
@@ -307,10 +280,10 @@ ClientGUI</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>232</x>
+      <x>180</x>
       <y>0</y>
-      <w>64</w>
-      <h>24</h>
+      <w>48</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=blue
 ServerGUI</panel_attributes>
@@ -319,10 +292,10 @@ ServerGUI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>448</x>
-      <y>16</y>
-      <w>24</w>
-      <h>56</h>
+      <x>342</x>
+      <y>12</y>
+      <w>18</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
@@ -330,43 +303,43 @@ ServerGUI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>16</y>
-      <w>24</w>
+      <x>312</x>
+      <y>12</y>
+      <w>18</w>
+      <h>174</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>12</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>216</x>
+      <y>12</y>
+      <w>18</w>
       <h>216</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;250.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>232</x>
-      <y>16</y>
-      <w>24</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>280</x>
-      <y>16</y>
-      <w>24</w>
-      <h>296</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;350.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;340.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>672</y>
-      <w>80</w>
-      <h>24</h>
+      <x>606</x>
+      <y>510</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=red
 Model</panel_attributes>
@@ -375,10 +348,10 @@ Model</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>744</y>
-      <w>80</w>
-      <h>24</h>
+      <x>606</x>
+      <y>564</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=yellow
 Observer</panel_attributes>
@@ -387,10 +360,10 @@ Observer</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>696</y>
-      <w>80</w>
-      <h>24</h>
+      <x>606</x>
+      <y>528</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=blue
 View</panel_attributes>
@@ -399,10 +372,10 @@ View</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>720</y>
-      <w>80</w>
-      <h>24</h>
+      <x>606</x>
+      <y>546</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>bg=green
 Controller</panel_attributes>
